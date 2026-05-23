@@ -1,0 +1,281 @@
+/**
+ * Fixes Tailwind preflight + Next.js defaults conflicting with legacy layout.
+ */
+
+@layer base {
+  /* Legacy layout relies on natural image dimensions and absolute positioning */
+  .wrapper img {
+    max-width: none;
+    height: auto;
+    display: inline;
+    vertical-align: baseline;
+  }
+
+  /* Legacy targets all buttons — keep shadcn/ui scoped outside .wrapper if needed later */
+  .wrapper button:not(#submit):not(.form-email) {
+    font-family: inherit;
+  }
+}
+
+/* Allow page scroll — legacy locked body to 100vh + hid overflow on .wrapper */
+html,
+body {
+  height: auto !important;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.wrapper {
+  overflow: visible !important;
+  min-height: 100vh;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto !important;
+  min-height: 100vh;
+}
+
+/* Flex column: main must grow (ScrollAnimations wrapper sits between header and main) */
+.site-content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: auto;
+  width: 100%;
+}
+
+/* Header: push burger to the right on mobile */
+.header-container {
+  justify-content: flex-start;
+}
+
+.header-container .burger-menu {
+  margin-left: auto;
+}
+
+/* Footer: full viewport width background + content area */
+footer.footer.footer-full-width {
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  background-color: #161c28;
+}
+
+footer.footer.footer-full-width .footer-block-container {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
+  background-color: #161c28;
+  padding: 160px 24px 60px;
+}
+
+/* Centered content — uses full width with max-width container */
+footer.footer.footer-full-width .footer-block--centered {
+  width: 100%;
+  max-width: 1340px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+footer.footer.footer-full-width .footer-top-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 475px;
+  gap: 48px;
+  align-items: start;
+  margin-bottom: 170px;
+}
+
+footer.footer.footer-full-width .footer-block-main {
+  height: auto;
+  margin: 0;
+}
+
+footer.footer.footer-full-width .get-started {
+  position: relative;
+  left: 0;
+  bottom: 0;
+  margin: 0;
+  justify-self: end;
+}
+
+footer.footer.footer-full-width .get-started-img {
+  margin: 20px auto 10px;
+  padding: 40px 0 0;
+  justify-content: center;
+}
+
+footer.footer.footer-full-width .footer-block-menu-form {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px 60px;
+}
+
+footer.footer.footer-full-width .footer-col {
+  flex: 0 1 410px;
+}
+
+footer.footer.footer-full-width .menu-form {
+  margin: 0 0 80px;
+}
+
+/* Newsletter: input + circular arrow button (not a green CTA pill) */
+.menu-form-field {
+  position: relative;
+  width: 100%;
+  height: 60px;
+}
+
+.menu-form-field input[id="name1"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 56px;
+  margin: 0;
+}
+
+.wrapper button.form-email {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: #54bd95;
+  color: #f8f8fa;
+  font-size: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s linear;
+}
+
+.wrapper button.form-email:hover {
+  background-color: rgb(146, 137, 137);
+}
+
+.form-email-arrow {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+}
+
+footer.footer.footer-full-width .footer-block-menu-block-links {
+  flex: 1 1 auto;
+  justify-content: center;
+  gap: 0 60px;
+}
+
+footer.footer.footer-full-width .footer-dowm {
+  width: 100%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+footer.footer.footer-full-width .footer-block-menu-text-second {
+  padding: 0;
+}
+
+footer.footer.footer-full-width .footer-dowm > .footer {
+  display: flex;
+  align-items: center;
+  height: auto !important;
+  background-color: transparent;
+}
+
+@media (max-width: 1100px) {
+  footer.footer.footer-full-width .footer-top-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-bottom: 100px;
+  }
+
+  footer.footer.footer-full-width .get-started {
+    justify-self: center;
+    max-width: 475px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 870px) {
+  footer.footer.footer-full-width .footer-block-menu-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  footer.footer.footer-full-width .footer-block-menu-block-links {
+    display: block;
+  }
+
+  footer.footer.footer-full-width .footer-dowm {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Legacy set height:2000px on .footer — only for inner legal row, not the <footer> element */
+  footer.footer.footer-full-width {
+    height: auto !important;
+  }
+}
+
+@media (max-width: 425px) {
+  footer.footer.footer-full-width .footer-block-container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  footer.footer.footer-full-width .footer-top-grid {
+    margin-bottom: 100px;
+  }
+
+  footer.footer.footer-full-width .get-started {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    min-height: 440px;
+  }
+
+  footer.footer.footer-full-width .form-for-get-started input,
+  footer.footer.footer-full-width .form-for-get-started textarea,
+  footer.footer.footer-full-width button[id="submit"] {
+    width: 100%;
+    max-width: 270px;
+  }
+
+  footer.footer.footer-full-width {
+    height: auto !important;
+  }
+}
+
+/* Footer form inputs — legacy focus (no shadcn rings) */
+.form-for-get-started input,
+.form-for-get-started textarea,
+.menu-form input {
+  box-shadow: none;
+  outline: none;
+}
+
+.form-for-get-started input:focus,
+.form-for-get-started textarea:focus,
+.menu-form input:focus {
+  outline: none;
+  box-shadow: none;
+}
